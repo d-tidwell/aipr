@@ -22,6 +22,7 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.theokanning.openai-gpt3-java:client:0.9.0'
 }
 
 application {

@@ -3,9 +3,16 @@
  */
 package aipr;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        OpenAiServe ai = new OpenAiServe();
+        CommitExtractor.extractCommit("/mnt/c/code/");
+        Map<String, ArrayList<String>> map = CommitExtractor.commitMap;
 
     }
 }
