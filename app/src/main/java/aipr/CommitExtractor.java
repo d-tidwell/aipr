@@ -15,11 +15,11 @@ public class CommitExtractor {
     public static Map<String, ArrayList<String>> commitMap= new HashMap<>();
 
     public static void extractCommit(String filepath) throws IOException {
-        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changefile.txt"));
+        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changelog.txt"));
         String line;
         String tag = "commit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
         int commitCount = tag.length();
-        Path fileName = Path.of(filepath + "sample.txt");
+        Path fileName = Path.of(filepath + "changelog.txt");
         String string = Files.readString(fileName);
         List<String> commitArr = getSubstrings(string, "commit");
 
@@ -41,13 +41,13 @@ public class CommitExtractor {
 
             }
         }
-        for (ArrayList<String> result : commitMap.values()){
-            for (String these: result) {
-                System.out.println(these.length());
-            }
-
-        }
-        System.out.println(commitMap);
+//        for (ArrayList<String> result : commitMap.values()){
+//            for (String these: result) {
+//                System.out.println(these.length());
+//            }
+//
+//        }
+        //System.out.println(commitMap);
 
     }
     public static ArrayList<String> getSubstrings(String input, String word) {
