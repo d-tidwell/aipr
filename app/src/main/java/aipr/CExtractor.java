@@ -34,20 +34,13 @@ public class CExtractor {
                     String atsString = d.substring(d.indexOf("@@"), d.length()-1);
                     int index1 = atsString.indexOf("@@");
                     int index2 = atsString.indexOf("@@", index1+1);
-                    //System.out.println(atsString.substring(index2+2, atsString.length()-1));
                     ArrayList<String> atsList = commitMap.get(keyS);
                     atsList.add(atsString.substring(index2+2, atsString.length()-1));
                 }
 
             }
         }
-//        for (ArrayList<String> result : commitMap.values()){
-//            for (String these: result) {
-//                System.out.println(these.length());
-//            }
-//
-//        }
-        //System.out.println(commitMap);
+
 
     }
     public static ArrayList<String> getSubstrings(String input, String word) {
