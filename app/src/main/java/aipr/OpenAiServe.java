@@ -17,8 +17,10 @@ public class OpenAiServe {
         prompt_build.append("Infer why the changes were made and explain any necessary details.");
         prompt_build.append("Bullet point each summary being as clear and brief as possible about the changes.");
         prompt_build.append("CODE:");
+        System.out.println(prompt_build.toString().length() + " !!!!!!!!!!!!!!!!!!!!!!!PrePromptCount");
         prompt_build.append(prompt_code);
         String newPrompt = prompt_build.toString();
+        System.out.println(newPrompt.length() + "    XXXXXXXXXXXXXXXXXXXXXXXPost Prompt Count");
         System.out.println("\nCreating completion...");
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .model("text-davinci-003")

@@ -15,13 +15,13 @@ public class CExtractor {
     public static Map<String, ArrayList<String>> cimmitMap= new HashMap<>();
 
     public static void extractcimmit(String filepath) throws IOException {
-        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changelog.txt"));
+        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changefile.txt"));
         String line;
         String tag = "cimmit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
         int cimmitCount = tag.length();
-        Path fileName = Path.of(filepath + "changelog.txt");
+        Path fileName = Path.of(filepath + "changefile.txt");
         String string = Files.readString(fileName);
-        List<String> cimmitArr = getSubstrings(string, "cimmit");
+        List<String> cimmitArr = getSubstrings(string, "commit");
 
         for(String s: cimmitArr){
             String keyS = s.substring(0, cimmitCount+1).strip();
