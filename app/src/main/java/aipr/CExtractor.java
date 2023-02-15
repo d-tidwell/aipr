@@ -12,20 +12,20 @@ import java.util.Map;
 
 
 public class CExtractor {
-    public static Map<String, ArrayList<String>> commitMap= new HashMap<>();
+    public static Map<String, ArrayList<String>> cimmitMap= new HashMap<>();
 
-    public static void extractCommit(String filepath) throws IOException {
+    public static void extractcimmit(String filepath) throws IOException {
         BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changelog.txt"));
         String line;
-        String tag = "commit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
-        int commitCount = tag.length();
+        String tag = "cimmit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
+        int cimmitCount = tag.length();
         Path fileName = Path.of(filepath + "changelog.txt");
         String string = Files.readString(fileName);
-        List<String> commitArr = getSubstrings(string, "commit");
+        List<String> cimmitArr = getSubstrings(string, "cimmit");
 
-        for(String s: commitArr){
-            String keyS = s.substring(0, commitCount+1).strip();
-            commitMap.put(keyS, new ArrayList<>());
+        for(String s: cimmitArr){
+            String keyS = s.substring(0, cimmitCount+1).strip();
+            cimmitMap.put(keyS, new ArrayList<>());
             List<String> diffs = getSubstrings(s, "diff");
             for(String d: diffs) {
 
@@ -34,10 +34,10 @@ public class CExtractor {
                     String atsString = d.substring(d.indexOf("@@"), d.length()-1);
                     int index1 = atsString.indexOf("@@");
                     int index2 = atsString.indexOf("@@", index1+1);
-                    ArrayList<String> atsList = commitMap.get(keyS);
+                    ArrayList<String> atsList = cimmitMap.get(keyS);
                     atsList.add(atsString.substring(index2+2, atsString.length()-1));
                 }
-
+                //making change
             }
         }
 

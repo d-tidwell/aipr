@@ -11,8 +11,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         OpenAiServe ai = new OpenAiServe();
-        CExtractor.extractCommit("/mnt/c/code/");
-        Map<String, ArrayList<String>> map = CExtractor.commitMap;
+        CExtractor.extractcimmit("/mnt/c/code/");
+        Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         for (String key : map.keySet()) {
             for (String result: map.get(key)) {
                 ai.makeRequest(result);
