@@ -4,26 +4,36 @@
 package aipr;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.lang.System.exit;
 
 public class App {
 
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
         OpenAiServe ai = new OpenAiServe();
         CExtractor.extractcimmit("/mnt/c/code/");
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
-//        for (String key : map.keySet()) {
-//            for (String result: map.get(key)) {
-//                ai.makeRequest(result);
-//            }
-//        }
 
-        //ai.makeRequest(thisString);
-        System.out.println(map.keySet());
-        System.out.println(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0).length());
-        System.out.println(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
-        System.out.println("----------------------------------------------------------------------------------------------");
-        ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
+        try {
+            ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
+        } catch (SocketTimeoutException STE) {
+            System.out.println("Socket Timeout, Model is busy, trying again in 10 seconds.");
+            TimeUnit.SECONDS.sleep(10);
+            try {
+                ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
+            } catch (SocketTimeoutException ST2) {
+                System.out.println("Completion Failed due to SocketTimeoutError");
+                exit(-1);
+            }
+        }
+        //System.out.println("----------------------------------------------------------------------------------------------");
+        //ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
     }
 }

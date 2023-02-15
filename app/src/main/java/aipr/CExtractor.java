@@ -22,22 +22,19 @@ public class CExtractor {
         Path fileName = Path.of(filepath + "changefile.txt");
         String string = Files.readString(fileName);
         List<String> cimmitArr = getSubstrings(string, "commit");
-
+        // need to remove any commitArr indices that contain ___ initial commit
         for(String s: cimmitArr){
             String keyS = s.substring(0, cimmitCount+1).strip();
             cimmitMap.put(keyS, new ArrayList<>());
             List<String> diffs = getSubstrings(s, "diff");
             for(String d: diffs) {
-
                 if (d.contains("@@")) {
-                    //System.out.println("NEW @@");
                     String atsString = d.substring(d.indexOf("@@"), d.length()-1);
                     int index1 = atsString.indexOf("@@");
                     int index2 = atsString.indexOf("@@", index1+1);
                     ArrayList<String> atsList = cimmitMap.get(keyS);
                     atsList.add(atsString.substring(index2+2, atsString.length()-1));
                 }
-                //making change
             }
         }
 
