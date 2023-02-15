@@ -21,19 +21,8 @@ public class App {
         CExtractor.extractcimmit("/mnt/c/code/");
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
 
-        try {
-            ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
-        } catch (SocketTimeoutException STE) {
-            System.out.println("Socket Timeout, Model is busy, trying again in 10 seconds.");
-            TimeUnit.SECONDS.sleep(10);
-            try {
-                ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
-            } catch (SocketTimeoutException ST2) {
-                System.out.println("Completion Failed due to SocketTimeoutError");
-                exit(-1);
-            }
-        }
-        //System.out.println("----------------------------------------------------------------------------------------------");
-        //ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
+        ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
+
+
     }
 }
