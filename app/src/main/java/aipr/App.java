@@ -11,32 +11,15 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         OpenAiServe ai = new OpenAiServe();
-        //CommitExtractor.extractCommit("/mnt/c/code/");
-        //Map<String, ArrayList<String>> map = CommitExtractor.commitMap;
-//        for (String key : map.keySet()) {
-//            for (String result: map.get(key)) {
-//                ai.makeRequest(result);
-//            }
-//        }
-        String thisString = "for(String s: commitArr){\n" +
-                "            String keyS = s.substring(0, commitCount+1).strip();\n" +
-                "            commitMap.put(keyS, new ArrayList<>());\n" +
-                "            List<String> diffs = getSubstrings(s, \"diff\");\n" +
-                "            for(String d: diffs) {\n" +
-                "\n" +
-                "                if (d.contains(\"@@\")) {\n" +
-                "                    //System.out.println(\"NEW @@\");\n" +
-                "                    String atsString = d.substring(d.indexOf(\"@@\"), d.length()-1);\n" +
-                "                    int index1 = atsString.indexOf(\"@@\");\n" +
-                "                    int index2 = atsString.indexOf(\"@@\", index1+1);\n" +
-                "                    //System.out.println(atsString.substring(index2+2, atsString.length()-1));\n" +
-                "                    ArrayList<String> atsList = commitMap.get(keyS);\n" +
-                "                    atsList.add(atsString.substring(index2+2, atsString.length()-1));\n" +
-                "                }\n" +
-                "\n" +
-                "            }\n" +
-                "        }";
-        ai.makeRequest(thisString);
+        CExtractor.extractCommit("/mnt/c/code/");
+        Map<String, ArrayList<String>> map = CExtractor.commitMap;
+        for (String key : map.keySet()) {
+            for (String result: map.get(key)) {
+                ai.makeRequest(result);
+            }
+        }
+
+        //ai.makeRequest(thisString);
         //System.out.println(map);
     }
 }

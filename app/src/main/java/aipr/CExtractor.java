@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CommitExtractor {
+public class CExtractor {
     public static Map<String, ArrayList<String>> commitMap= new HashMap<>();
 
     public static void extractCommit(String filepath) throws IOException {
