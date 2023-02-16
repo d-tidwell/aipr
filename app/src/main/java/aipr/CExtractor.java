@@ -32,8 +32,10 @@ public class CExtractor {
                     String atsString = d.substring(d.indexOf("@@"), d.length()-1);
                     int index1 = atsString.indexOf("@@");
                     int index2 = atsString.indexOf("@@", index1+1);
+                    int index3 = atsString.indexOf("@@", index2+1);
+                    int index4 = atsString.indexOf("@@", index3+1);
                     ArrayList<String> atsList = cimmitMap.get(keyS);
-                    atsList.add(atsString.substring(index2+2, atsString.length()-1));
+                    atsList.add(atsString.substring(index4+2, atsString.length()-1));
                 }
             }
         }
