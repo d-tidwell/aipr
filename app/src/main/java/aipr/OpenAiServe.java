@@ -53,8 +53,6 @@ public class OpenAiServe {
 
             System.out.println("---------------------------------------------------------------------------");
             System.out.println(completion);
-//            System.out.println(
-//                    completion.toString().substring(completion.toString().indexOf("text="+1),completion.toString().indexOf("index=0")-3));
             System.out.println("---------------------------------------------------------------------------\n\n");
         } catch (RuntimeException RE) {
             System.out.println(RE.getCause());

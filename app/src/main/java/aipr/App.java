@@ -4,14 +4,10 @@
 package aipr;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
+
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static java.lang.System.exit;
 
 public class App {
 
@@ -21,20 +17,17 @@ public class App {
         CExtractor.extractcimmit("/mnt/c/code/");
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         for(String x: map.keySet()) {
-
             for(int i=0; i < map.get(x).size(); i++) {
                 if (map.get(x).get(i).contains("initial commit")) {
                     continue;
                 }
                 System.out.println(x);
                 ai.makeRequest(map.get(x).get(i));
-                TimeUnit.SECONDS.sleep(3);
+                //TimeUnit.SECONDS.sleep(3);
             }
 
         }
         System.out.println("Success, all changes have been commented, Have a nice day.");
-        //ai.makeRequest(map.get("commit 59daef8d55de04b91434b39d4411a7939107645b").get(0));
-
 
     }
 }
