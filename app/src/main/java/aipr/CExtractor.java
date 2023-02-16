@@ -37,9 +37,8 @@ public class CExtractor {
                 }
             }
         }
-
-
     }
+
     public static ArrayList<String> getSubstrings(String input, String word) {
         ArrayList<String> substrings = new ArrayList<>();
         int index = 0;
