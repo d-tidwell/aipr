@@ -21,6 +21,18 @@ public class OpenAiServe {
         this.resultsMap = new HashMap<>();
     }
 
+    /**
+
+     This method makes a request to the OpenAI service using the OpenAiService class to generate a comment for a commit with
+     a given commitId and prompt code. The method constructs a prompt to be used for the completion request, which includes
+     the code prompt trimmed of new lines at the end or beginning, and additional instructions for summarizing the changes
+     made to the code. The method also performs some error handling, such as checking the size of the prompt before making
+     the request and logging errors if the service returns an error. The completed comment is returned as a string.
+     @param commitId the ID of the commit to generate a comment for
+     @param prompt_code the prompt code to use for generating the comment
+     @return the completed comment as a string
+     @throws SocketTimeoutException if the request to the OpenAI service times out
+     */
     public String makeRequest(String commitId, String prompt_code) throws SocketTimeoutException {
         //String token = System.getenv("OPENAI_TOKEN");
         OpenAiService service = new OpenAiService(API_KEY.KEYS, Duration.ofSeconds(25));
@@ -57,6 +69,14 @@ public class OpenAiServe {
         }
 
     }
+    /**
+
+     This method is used to extract commits from files located at "/mnt/c/code/" into a map, and then generates comments
+     for each commit using the OpenAiServe class. It also performs some error handling such as checking for banned phrases
+     in the commit message and logging errors if the OpenAI service returns an error. The comments are added to a map
+     called 'resultsMap'.
+     @throws IOException if an I/O error occurs while extracting the commits from the files
+     */
     public void addToMap() throws IOException {
         OpenAiServe ai = new OpenAiServe();
         //find the commit file and extract commits into a map

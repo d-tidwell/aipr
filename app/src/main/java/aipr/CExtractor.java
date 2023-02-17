@@ -14,6 +14,15 @@ import java.util.Map;
 public class CExtractor {
     public static Map<String, ArrayList<String>> cimmitMap= new HashMap<>();
 
+    /**
+     Extracts commits and code changes from a text file and populates them in a HashMap.
+     The method takes a file path string and reads the file as a string. It then extracts all the commit ids from the file,
+     uses a helper function to parse the text file and extract the actual code changes, and stores them in a HashMap.
+     The commit ids are used as keys in the HashMap, and the corresponding code changes are stored as values in ArrayLists.
+     @param filepath a string representing the path of the file to be read
+     @throws IOException if there is an error reading the file
+     @return void
+     **/
     public static void extractcimmit(String filepath) throws IOException {
         //bring in the file
         BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changefile.txt"));
@@ -29,7 +38,8 @@ public class CExtractor {
         //calls helper function to get a list of Srings of all commits
         List<String> cimmitArr = getSubstrings(string, "commit");
 
-        //parses text file to extract the actual code changes foregoing the import statements for now
+        //parses text file to extract the actual code changes foregoing 1st @@ -->@@ usually the import statements
+        //due to the token limitation and parsing challenge
         for(String s: cimmitArr){
             String keyS = s.substring(0, cimmitCount+1).strip();
             cimmitMap.put(keyS, new ArrayList<>());
@@ -52,7 +62,16 @@ public class CExtractor {
             }
         }
     }
-
+    /**
+     Returns an ArrayList of all substrings of a given input string that occur between instances of a specified word.
+     The method takes an input string and a word, and then iterates over the input string to find all instances of the
+     word. For each instance of the word, it extracts the substring that occurs between the current and next instance of
+     the word, and adds this substring to an ArrayList. The final substring in the input string is added to the ArrayList
+     after the loop ends. The ArrayList of substrings is then returned.
+     @param input a string representing the input text to be searched
+     @param word a string representing the word to be used as a separator
+     @return an ArrayList of strings, containing all substrings of the input string that occur between instances of the word
+     */
     public static ArrayList<String> getSubstrings(String input, String word) {
         ArrayList<String> substrings = new ArrayList<>();
         int index = 0;
