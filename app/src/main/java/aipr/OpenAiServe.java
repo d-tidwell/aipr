@@ -9,14 +9,17 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class OpenAiServe {
 
-    private Map<String,ArrayList<String>> resultsMap;
+    private Map<String, LinkedList<String>> resultsMap;
 
     public OpenAiServe(){
         this.resultsMap = new HashMap<>();
@@ -43,8 +46,7 @@ public class OpenAiServe {
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
         if (estimated_token_count + 500 > 3596) {
-            System.out.println("Prompt size to large to complete request:  " + commitId);
-            return null;
+            return "ERROR: Prompt size to large to complete request for file in:  " + commitId;
         }
         //System.out.println(newPrompt.length() + "    XXXXXXXXXXXXXXXXXXXXXXXPost Prompt Count");
         //System.out.println(
@@ -64,37 +66,68 @@ public class OpenAiServe {
             return completion;
         } catch (RuntimeException RE) {
             System.out.println(commitId);
-            System.out.println("ERROR" + RE.getCause());
-            return null;
+            return "SERVICE_ERROR_CAUSE: " + RE.getCause();
         }
 
     }
 
     public void addToMap() throws IOException {
         OpenAiServe ai = new OpenAiServe();
+        //find the commit file and extract commits into a map
         CExtractor.extractcimmit("/mnt/c/code/");
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         String numberOfCommits = String.valueOf(map.size());
+        resultsMap.put("totalNumberOfCommits", new LinkedList<>(Collections.singletonList(numberOfCommits)));
+        System.out.println("Creating comments ...");
         for(String x: map.keySet()) {
-            resultsMap.put(x,new ArrayList<>());
+            resultsMap.put(x,new LinkedList<>());
+            int diffErrorCount = 0;
             for(int i=0; i < map.get(x).size(); i++) {
+                System.out.print(".");
                 if (map.get(x).get(i).contains("initial commit")) {
+                    LinkedList<String> existing = resultsMap.get(x);
+                    existing.addFirst("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
+                    diffErrorCount += 1;
                     continue;
                 }
-                String completion =  ai.makeRequest(x, map.get(x).get(i));
-                if(Objects.isNull(completion)){
+                if (map.get(x).get(i).contains("diff")) {
+                    LinkedList<String> existing = resultsMap.get(x);
+                    existing.addFirst("ERROR: CONTAINS \"diff\" BANNED WORD");
+                    diffErrorCount += 1;
                     continue;
+                }
+                if (map.get(x).get(i).contains("diff")) {
+                    LinkedList<String> existing = resultsMap.get(x);
+                    existing.addFirst("ERROR: CONTAINS \"@@\" BANNED PHRASE");
+                    diffErrorCount += 1;
+                    continue;
+                }
+                //make the actual request for comment
+                String completion =  ai.makeRequest(x, map.get(x).get(i));
+                if (completion.contains("SERVICE_ERROR_CAUSE:")) {
+                    LinkedList<String> existing = resultsMap.get(x);
+                    existing.addFirst(completion);
+                    diffErrorCount += 1;
+                }
+                LinkedList<String> existing = resultsMap.get(x);
+                if (completion.isEmpty()) {
+                    existing.addFirst("ERROR: NULL or EMPTY COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
+                    diffErrorCount += 1;
                 } else {
-                    ArrayList<String> existing = resultsMap.get(x);
-                    existing.add(completion);
+                    existing.addFirst(completion);
                 }
             }
 
+            //log diff errors in last index or first if 0 size
+
+            resultsMap.get(x).addLast("DIFF ERRORS = " + String.valueOf(diffErrorCount));
+
         }
-        System.out.println("Success, all changes have been commented, Have a nice day.");
+        System.out.println("\n");
+        System.out.println("Marginal Success, review comments and counts, Have a nice day.");
     }
 
-    public Map<String, ArrayList<String>> getResultsMap() {
+    public Map<String, LinkedList<String>> getResultsMap() {
         return resultsMap;
     }
 }
