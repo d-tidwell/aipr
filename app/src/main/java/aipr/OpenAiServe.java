@@ -23,9 +23,7 @@ public class OpenAiServe {
 
     public String makeRequest(String commitId, String prompt_code) throws SocketTimeoutException {
         //String token = System.getenv("OPENAI_TOKEN");
-        //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
-        OpenAiService service = new OpenAiService(
-                "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", Duration.ofSeconds(25));
+        OpenAiService service = new OpenAiService(API_KEY.KEYS, Duration.ofSeconds(25));
 
         StringBuilder prompt_build = new StringBuilder();
         //add the code prompt trimmed of new lines at the end or beginning to help model completion
