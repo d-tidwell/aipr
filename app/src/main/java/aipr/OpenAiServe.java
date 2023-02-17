@@ -27,22 +27,19 @@ public class OpenAiServe {
 
         StringBuilder prompt_build = new StringBuilder();
         //add the code prompt trimmed of new lines at the end or beginning to help model completion
-        prompt_build.append(prompt_code);
+        prompt_build.append(prompt_code.trim());
         //add the prefilled prompt for completion
-        prompt_build.append("Summarize the changes to the above code.");
-        prompt_build.append("The lines in the above code starting with + are additions to the code.");
-        prompt_build.append("The lines in the above code starting with - are lines removed from the code.");
-        prompt_build.append("Use Bullet points to communicate changes, being as clear and brief as possible.");
-        prompt_build.append("Comment:");
+        prompt_build.append("Summarize the changes to the above code.\n");
+        prompt_build.append("The lines in the above code starting with + are additions to the code.\n");
+        prompt_build.append("The lines in the above code starting with - are lines removed from the code.\n");
+        prompt_build.append("Use Bullet points to communicate changes, being as clear and brief as possible.\n");
+        prompt_build.append("Comments:");
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
         if (estimated_token_count + 500 > 3596) {
             return "ERROR: Prompt size to large to complete request for file in:  " + commitId;
         }
-        //System.out.println(newPrompt.length() + "    XXXXXXXXXXXXXXXXXXXXXXXPost Prompt Count");
-        //System.out.println(
-//                "Creating completion..." + "prompt length in tokens before ~ (" +
-//                        estimated_token_count + ") + words ("+ prompt_build.toString().length()+") \n\n ");
+
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .model("text-davinci-003")
                 .prompt(prompt_build.toString())
@@ -60,7 +57,6 @@ public class OpenAiServe {
         }
 
     }
-
     public void addToMap() throws IOException {
         OpenAiServe ai = new OpenAiServe();
         //find the commit file and extract commits into a map
@@ -75,22 +71,21 @@ public class OpenAiServe {
             int serviceErrorCount =0;
             for(int i=0; i < map.get(x).size(); i++) {
 
+                LinkedList<String> existing = resultsMap.get(x);
+
                 if (map.get(x).get(i).contains("initial commit")) {
-                    LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
                     diffErrorCount += 1;
                     System.out.print("X");
                     continue;
                 }
                 if (map.get(x).get(i).contains("diff")) {
-                    LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"diff\" BANNED WORD");
                     diffErrorCount += 1;
                     System.out.print("X");
                     continue;
                 }
                 if (map.get(x).get(i).contains("@@")) {
-                    LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"@@\" BANNED PHRASE");
                     diffErrorCount += 1;
                     System.out.print("X");
@@ -99,12 +94,10 @@ public class OpenAiServe {
                 //make the actual request to openai for comment
                 String completion =  ai.makeRequest(x, map.get(x).get(i));
                 if (completion.contains("SERVICE_ERROR_CAUSE:")) {
-                    LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst(completion);
                     diffErrorCount += 1;
                     System.out.print("X");
                 }
-                LinkedList<String> existing = resultsMap.get(x);
 
                 if (completion.isEmpty()) {
                     existing.addFirst("ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
@@ -115,12 +108,10 @@ public class OpenAiServe {
                     System.out.print("♥");
                 }
             }
-
             //log diff errors in last index or first if 0 size
 
             resultsMap.get(x).addLast("DIFF ERRORS = " + String.valueOf(diffErrorCount));
             resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(serviceErrorCount));
-
         }
         System.out.println("\n");
         //want to ratio this to enums of outcomes for better user message
