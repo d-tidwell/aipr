@@ -62,8 +62,7 @@ public class OpenAiServe {
             String completion = service.createCompletion(completionRequest).getChoices().get(0).getText();
             return completion;
         } catch (RuntimeException RE) {
-            System.out.println(commitId);
-            return "SERVICE_ERROR_CAUSE: " + RE.getCause();
+            return "SERVICE_ERROR_CAUSE: " + commitId + ":" + RE.getCause();
         }
 
     }

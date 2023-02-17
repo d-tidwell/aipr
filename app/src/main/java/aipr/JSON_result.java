@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 
 public class JSON_result {
 
-    public void saveMapToJson(Map<String, LinkedList<String>> map, String filename) {
+    public static void saveMapToJson(Map<String, LinkedList<String>> map, String filename) {
         // Create a new JSON object
         JSONObject json = new JSONObject();
 

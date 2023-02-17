@@ -5,7 +5,6 @@ package aipr;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -17,14 +16,7 @@ public class App {
         OpenAiServe runner = new OpenAiServe();
         runner.addToMap();
         Map<String, LinkedList<String>> results = runner.getResultsMap();
-        for(String s: results.keySet()) {
-            System.out.println("---------------------------------------");
-            System.out.println("\n" + s);
-            for(String diffed: results.get(s)) {
-                System.out.println(diffed);
-            }
-            System.out.println("---------------------------------------");
-        }
+        JSON_result.saveMapToJson(results, "pr_summary.json");
 
     }
 }
