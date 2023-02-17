@@ -78,6 +78,7 @@ public class OpenAiServe {
         for(String x: map.keySet()) {
             resultsMap.put(x,new LinkedList<>());
             int diffErrorCount = 0;
+            int serviceErrorCount =0;
             for(int i=0; i < map.get(x).size(); i++) {
 
                 if (map.get(x).get(i).contains("initial commit")) {
@@ -124,6 +125,7 @@ public class OpenAiServe {
             //log diff errors in last index or first if 0 size
 
             resultsMap.get(x).addLast("DIFF ERRORS = " + String.valueOf(diffErrorCount));
+            resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(diffErrorCount));
 
         }
         System.out.println("\n");
