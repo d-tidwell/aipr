@@ -32,17 +32,14 @@ public class OpenAiServe {
                 "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", Duration.ofSeconds(25));
 
         StringBuilder prompt_build = new StringBuilder();
-        //add the code prompt trimmed of new lines at the end or beginning
+        //add the code prompt trimmed of new lines at the end or beginning to help model completion
         prompt_build.append(prompt_code);
         //add the prefilled prompt for completion
-        prompt_build.append("Summarize of the changes to the above code.");
-        prompt_build.append("The lines starting with + are additions to the code.");
-        prompt_build.append("The lines starting with - are lines removed from the code.");
-        //prompt_build.append("Infer why the changes were made and explain any necessary details.");
-        prompt_build.append("Use Bullet points to summarize changes, being as clear and brief as possible.");
+        prompt_build.append("Summarize the changes to the above code.");
+        prompt_build.append("The lines in the above code starting with + are additions to the code.");
+        prompt_build.append("The lines in the above code starting with - are lines removed from the code.");
+        prompt_build.append("Use Bullet points to communicate changes, being as clear and brief as possible.");
         prompt_build.append("Comment:");
-
-        //System.out.println("RAW PROMPT COUNT" + prompt_build.toString().length());
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
         if (estimated_token_count + 500 > 3596) {
@@ -78,43 +75,50 @@ public class OpenAiServe {
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         String numberOfCommits = String.valueOf(map.size());
         resultsMap.put("totalNumberOfCommits", new LinkedList<>(Collections.singletonList(numberOfCommits)));
-        System.out.println("Creating comments ...");
+        System.out.print("Creating comments ...");
         for(String x: map.keySet()) {
             resultsMap.put(x,new LinkedList<>());
             int diffErrorCount = 0;
             for(int i=0; i < map.get(x).size(); i++) {
-                System.out.print(".");
+
                 if (map.get(x).get(i).contains("initial commit")) {
                     LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
                     diffErrorCount += 1;
+                    System.out.print("X");
                     continue;
                 }
                 if (map.get(x).get(i).contains("diff")) {
                     LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"diff\" BANNED WORD");
                     diffErrorCount += 1;
+                    System.out.print("X");
                     continue;
                 }
-                if (map.get(x).get(i).contains("diff")) {
+                if (map.get(x).get(i).contains("@@")) {
                     LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst("ERROR: CONTAINS \"@@\" BANNED PHRASE");
                     diffErrorCount += 1;
+                    System.out.print("X");
                     continue;
                 }
-                //make the actual request for comment
+                //make the actual request to openai for comment
                 String completion =  ai.makeRequest(x, map.get(x).get(i));
                 if (completion.contains("SERVICE_ERROR_CAUSE:")) {
                     LinkedList<String> existing = resultsMap.get(x);
                     existing.addFirst(completion);
                     diffErrorCount += 1;
+                    System.out.print("X");
                 }
                 LinkedList<String> existing = resultsMap.get(x);
+
                 if (completion.isEmpty()) {
-                    existing.addFirst("ERROR: NULL or EMPTY COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
+                    existing.addFirst("ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
                     diffErrorCount += 1;
+                    System.out.print("X");
                 } else {
                     existing.addFirst(completion);
+                    System.out.print("♥");
                 }
             }
 
@@ -124,7 +128,8 @@ public class OpenAiServe {
 
         }
         System.out.println("\n");
-        System.out.println("Marginal Success, review comments and counts, Have a nice day.");
+        //want to ratio this to enums of outcomes for better user message
+        System.out.println("Not Bad - Marginal Success, review comments and counts, Have a nice day.");
     }
 
     public Map<String, LinkedList<String>> getResultsMap() {
