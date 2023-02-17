@@ -4,13 +4,25 @@ import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
+import javax.annotation.processing.Completion;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class OpenAiServe {
 
-    public void makeRequest(String prompt_code) throws SocketTimeoutException {
+    private Map<String,ArrayList<String>> resultsMap;
+
+    public OpenAiServe(){
+        this.resultsMap = new HashMap<>();
+    }
+
+    public String makeRequest(String commitId, String prompt_code) throws SocketTimeoutException {
         //String token = System.getenv("OPENAI_TOKEN");
         //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
         OpenAiService service = new OpenAiService(
@@ -27,17 +39,17 @@ public class OpenAiServe {
         prompt_build.append("Use Bullet points to summarize changes, being as clear and brief as possible.");
         prompt_build.append("Comment:");
 
-        System.out.println("RAW PROMPT COUNT" + prompt_build.toString().length());
+        //System.out.println("RAW PROMPT COUNT" + prompt_build.toString().length());
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
         if (estimated_token_count + 500 > 3596) {
-            System.out.println("Prompt size to large to complete request");
-            return;
+            System.out.println("Prompt size to large to complete request:  " + commitId);
+            return null;
         }
         //System.out.println(newPrompt.length() + "    XXXXXXXXXXXXXXXXXXXXXXXPost Prompt Count");
-        System.out.println(
-                "Creating completion..." + "prompt length in tokens before ~ (" +
-                        estimated_token_count + ") + words ("+ prompt_build.toString().length()+") \n\n ");
+        //System.out.println(
+//                "Creating completion..." + "prompt length in tokens before ~ (" +
+//                        estimated_token_count + ") + words ("+ prompt_build.toString().length()+") \n\n ");
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .model("text-davinci-003")
                 .prompt(prompt_build.toString())
@@ -46,20 +58,43 @@ public class OpenAiServe {
                 .maxTokens(250)
                 .build();
 
-
         //return first result
         try {
-            CompletionChoice completion = service.createCompletion(completionRequest).getChoices().get(0);
-
-            System.out.println("---------------------------------------------------------------------------");
-            System.out.println(completion);
-            System.out.println("---------------------------------------------------------------------------\n\n");
+            String completion = service.createCompletion(completionRequest).getChoices().get(0).getText();
+            return completion;
         } catch (RuntimeException RE) {
-            System.out.println(RE.getCause());
-            System.out.println("Model timeout request - skipping result");
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+            System.out.println(commitId);
+            System.out.println("ERROR" + RE.getCause());
+            return null;
         }
 
     }
 
+    public void addToMap() throws IOException {
+        OpenAiServe ai = new OpenAiServe();
+        CExtractor.extractcimmit("/mnt/c/code/");
+        Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
+        String numberOfCommits = String.valueOf(map.size());
+        for(String x: map.keySet()) {
+            resultsMap.put(x,new ArrayList<>());
+            for(int i=0; i < map.get(x).size(); i++) {
+                if (map.get(x).get(i).contains("initial commit")) {
+                    continue;
+                }
+                String completion =  ai.makeRequest(x, map.get(x).get(i));
+                if(Objects.isNull(completion)){
+                    continue;
+                } else {
+                    ArrayList<String> existing = resultsMap.get(x);
+                    existing.add(completion);
+                }
+            }
+
+        }
+        System.out.println("Success, all changes have been commented, Have a nice day.");
+    }
+
+    public Map<String, ArrayList<String>> getResultsMap() {
+        return resultsMap;
+    }
 }

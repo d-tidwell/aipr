@@ -13,21 +13,13 @@ public class App {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        OpenAiServe ai = new OpenAiServe();
-        CExtractor.extractcimmit("/mnt/c/code/");
-        Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
-        for(String x: map.keySet()) {
-            for(int i=0; i < map.get(x).size(); i++) {
-                if (map.get(x).get(i).contains("initial commit")) {
-                    continue;
-                }
-                System.out.println(x);
-                ai.makeRequest(map.get(x).get(i));
-                //TimeUnit.SECONDS.sleep(3);
-            }
-
+        OpenAiServe runner = new OpenAiServe();
+        runner.addToMap();
+        Map<String, ArrayList<String>> results = runner.getResultsMap();
+        for(String s: results.keySet()) {
+            System.out.println(s);
+            System.out.println(results.get(s));
         }
-        System.out.println("Success, all changes have been commented, Have a nice day.");
 
     }
 }
