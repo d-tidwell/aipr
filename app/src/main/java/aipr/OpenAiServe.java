@@ -1,10 +1,8 @@
 package aipr;
 
-import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
-import javax.annotation.processing.Completion;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
@@ -12,10 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+
 
 public class OpenAiServe {
 
@@ -125,7 +121,7 @@ public class OpenAiServe {
             //log diff errors in last index or first if 0 size
 
             resultsMap.get(x).addLast("DIFF ERRORS = " + String.valueOf(diffErrorCount));
-            resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(diffErrorCount));
+            resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(serviceErrorCount));
 
         }
         System.out.println("\n");
