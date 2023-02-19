@@ -22,7 +22,6 @@ public class OpenAiServe {
     }
 
     /**
-
      This method makes a request to the OpenAI service using the OpenAiService class to generate a comment for a commit with
      a given commitId and prompt code. The method constructs a prompt to be used for the completion request, which includes
      the code prompt trimmed of new lines at the end or beginning, and additional instructions for summarizing the changes
@@ -70,7 +69,6 @@ public class OpenAiServe {
 
     }
     /**
-
      This method is used to extract commits from files located at "/mnt/c/code/" into a map, and then generates comments
      for each commit using the OpenAiServe class. It also performs some error handling such as checking for banned phrases
      in the commit message and logging errors if the OpenAI service returns an error. The comments are added to a map
