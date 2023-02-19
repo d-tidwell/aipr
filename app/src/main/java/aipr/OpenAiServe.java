@@ -118,7 +118,8 @@ public class OpenAiServe {
                 }
 
                 if (completion.isEmpty()) {
-                    existing.addFirst("ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
+                    existing.addFirst(
+                            "ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
                     diffErrorCount += 1;
                     System.out.print("X");
                 } else {
@@ -132,7 +133,7 @@ public class OpenAiServe {
             resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(serviceErrorCount));
         }
         System.out.println("\n");
-        //want to ratio this to enums of outcomes for better user message
+        //feature to create ratio this to enums of outcomes for better user message
         System.out.println("Not Bad - Marginal Success, review comments and counts, Have a nice day.");
     }
 
