@@ -21,7 +21,6 @@ public class CExtractor {
      The commit ids are used as keys in the HashMap, and the corresponding code changes are stored as values in ArrayLists.
      @param filepath a string representing the path of the file to be read
      @throws IOException if there is an error reading the file
-     @return void
      **/
     public static void extractcimmit(String filepath) throws IOException {
         //bring in the file

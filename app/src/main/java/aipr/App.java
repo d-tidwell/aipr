@@ -16,6 +16,12 @@ public class App {
         runner.addToMap();
         Map<String, LinkedList<String>> results = runner.getResultsMap();
         JSON_result.saveMapToJson(results, "pr_summary.json");
+        for (String cimmit: results.keySet()) {
+            System.out.println(cimmit);
+            for(String gens: results.get(cimmit)) {
+                System.out.println(gens);
+            }
+        }
 
     }
 }
