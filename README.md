@@ -23,7 +23,7 @@ This key can also be passed to the System Environment variables and called direc
 
 2. source the .custom_bash_commands.sh in the command line
         ➜  aipr source ~/.custom_bash_commands.sh
-3. from the directory you wish to create the pr summary run request_pr and a git date i.e.
+3. from the directory you wish to create the pr summary run request_pr and a version of a valid git date option i.e.
 
         request_pr -1 
         request_pr 1.day

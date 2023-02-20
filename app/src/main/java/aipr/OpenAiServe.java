@@ -92,19 +92,19 @@ public class OpenAiServe {
                 LinkedList<String> existing = resultsMap.get(x);
 
                 if (map.get(x).get(i).contains("initial commit")) {
-                    existing.addFirst("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
+                    existing.addLast("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
                     diffErrorCount += 1;
                     System.out.print("X");
                     continue;
                 }
                 if (map.get(x).get(i).contains("diff")) {
-                    existing.addFirst("ERROR: CONTAINS \"diff\" BANNED WORD");
+                    existing.addLast("ERROR: CONTAINS \"diff\" BANNED WORD");
                     diffErrorCount += 1;
                     System.out.print("X");
                     continue;
                 }
                 if (map.get(x).get(i).contains("@@")) {
-                    existing.addFirst("ERROR: CONTAINS \"@@\" BANNED PHRASE");
+                    existing.addLast("ERROR: CONTAINS \"@@\" BANNED PHRASE");
                     diffErrorCount += 1;
                     System.out.print("X");
                     continue;
@@ -112,18 +112,18 @@ public class OpenAiServe {
                 //make the actual request to openai for comment
                 String completion =  ai.makeRequest(x, map.get(x).get(i));
                 if (completion.contains("SERVICE_ERROR_CAUSE:")) {
-                    existing.addFirst(completion);
+                    existing.addLast(completion);
                     diffErrorCount += 1;
                     System.out.print("X");
                 }
 
                 if (completion.isEmpty()) {
-                    existing.addFirst(
+                    existing.addLast(
                             "ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
                     diffErrorCount += 1;
                     System.out.print("X");
                 } else {
-                    existing.addFirst(completion);
+                    existing.addLast(completion);
                     System.out.print("♥");
                 }
             }

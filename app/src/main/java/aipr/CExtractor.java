@@ -24,14 +24,14 @@ public class CExtractor {
      **/
     public static void extractcimmit(String filepath) throws IOException {
         //bring in the file
-        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "test_for_greaterthanfour_ats.txt"));
+        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "Jeff_Newton.txt"));
 
         //string example of commit id to extract commit + hash number length for map key
         String tag = "cimmit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
         int cimmitCount = tag.length();
 
         //read the file as a string
-        Path fileName = Path.of(filepath + "test_for_greaterthanfour_ats.txt");
+        Path fileName = Path.of(filepath + "Jeff_Newton.txt");
         String string = Files.readString(fileName);
 
         //calls helper function to get a list of Srings of all commits
