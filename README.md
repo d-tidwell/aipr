@@ -14,7 +14,10 @@ This key can also be passed to the System Environment variables and called direc
 
 ### Steps to Reproduce Results
 1. source the .custom_bash_commands.sh in the command line
-2. from the directory you wish to create the pr summary run request_pr
-3. the results will be available as a json file and printed to the command line
-4. The last entry of each commit is the error counts for prompt errors and service down errors
+2. from the directory you wish to create the pr summary run request_pr and a git date i.e. 
+        request_pr 1.day
+        request_pr 2023-1-10
+        request_pr 10 days ago
+3. the results will be available as a json file and also printed to the command line
+4. The last entry of each commit is the error counts for prompt errors and service down error counts
 5. One key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
