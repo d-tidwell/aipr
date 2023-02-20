@@ -24,39 +24,56 @@ public class CExtractor {
      **/
     public static void extractcimmit(String filepath) throws IOException {
         //bring in the file
-        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "changefile.txt"));
+        BufferedReader realReader = new BufferedReader(new FileReader(filepath + "test_for_greaterthanfour_ats.txt"));
 
         //string example of commit id to extract commit + hash number length for map key
         String tag = "cimmit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
         int cimmitCount = tag.length();
 
         //read the file as a string
-        Path fileName = Path.of(filepath + "changefile.txt");
+        Path fileName = Path.of(filepath + "test_for_greaterthanfour_ats.txt");
         String string = Files.readString(fileName);
 
         //calls helper function to get a list of Srings of all commits
         List<String> cimmitArr = getSubstrings(string, "commit");
 
-        //parses text file to extract the actual code changes foregoing 1st @@ -->@@ usually the import statements
-        //due to the token limitation and parsing challenge
         for(String s: cimmitArr){
             String keyS = s.substring(0, cimmitCount+1).strip();
             cimmitMap.put(keyS, new ArrayList<>());
             List<String> diffs = getSubstrings(s, "diff");
             for(String d: diffs) {
                 if (d.contains("@@")) {
-                    String atsString = d.substring(d.indexOf("@@"), d.length()-1);
-                    int index1 = atsString.indexOf("@@");
-                    int index2 = atsString.indexOf("@@", index1+2);
-                    int index3 = atsString.indexOf("@@", index2+2);
-                    if(index3 == -1) {
-                        ArrayList<String> atsList = cimmitMap.get(keyS);
-                        atsList.add(atsString.substring(index2+2, atsString.length()-1));
-                    } else {
-                        int index4 = atsString.indexOf("@@", index3 + 1);
-                        ArrayList<String> atsList = cimmitMap.get(keyS);
-                        atsList.add(atsString.substring(index4 + 2, atsString.length() - 1));
+                    //keep track of index count
+                    int end_of_ats = 0;
+                    //make a list of indices
+                    List<Integer> indicesAts = new ArrayList<>();
+                    for (int i = 0; i < d.length() - 1; i++) {
+                        if (d.charAt(i) == '@' && d.charAt(i+1) == '@') {
+                            end_of_ats++;
+                            indicesAts.add(i);
+                        }
                     }
+
+                    //if its not an empty list and has even number of indices
+                    ArrayList<String> atsList = cimmitMap.get(keyS);
+                    if (indicesAts.size() > 0 && indicesAts.size() % 2 == 0) {
+                        //check off by one error here and test for completion
+                        for(int y=1; y < indicesAts.size(); y += 2){
+
+                            //if this only has one diff in the commit or
+                            //if we are at the last index
+                            if (indicesAts.size() == 2 || y == indicesAts.size() - 1) {
+                                //just give me the rest of the string
+                                atsList.add(d.substring(indicesAts.get(y)+2));
+                                break;
+                            }
+                            //give me an odd to next even index
+                            atsList.add(d.substring(indicesAts.get(y)+2, indicesAts.get(y+1)));
+                        }
+                    } else {
+                        atsList.add("THIS FILE DIFF SHOWS NO CODE SUBSTANTIAL CHANGES OR POSSIBLE PARSING ERROR");
+                    }
+
                 }
             }
         }
