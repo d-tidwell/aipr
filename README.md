@@ -17,15 +17,19 @@ This key can also be passed to the System Environment variables and called direc
 
 ### Steps to Reproduce Results
 1. Make a directory at the root called aipr
+
         ➜  ~ mkdir aipr
         ➜  ~ cd aipr
+
 2. source the .custom_bash_commands.sh in the command line
         ➜  aipr source ~/.custom_bash_commands.sh
 3. from the directory you wish to create the pr summary run request_pr and a git date i.e.
+
         request_pr -1 
         request_pr 1.day
         request_pr 2023-1-10
         request_pr 10 days ago
+
    1st command Only last commit - best solution for iterative commit summaries
    2nd command Everything since 12AM 
    3rd command since this date
