@@ -11,5 +11,6 @@ function setup_request_pr(){
 	echo "If you would like the function request_pr to perist termnial sessions add to your .bash_profile on mac"
 	echo "or .bashrc on WSL2. If using ohmyZsh or anything else please refere to this:"
 	echo " https://letmegooglethat.com/?q=how+to+add+custom+shell+commands+to+ohmyzsh"
+	echo "  "
 	echo "For further setup and error message explanations run request_help from any directory."
 }
