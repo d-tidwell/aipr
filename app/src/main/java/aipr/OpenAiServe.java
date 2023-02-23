@@ -133,8 +133,7 @@ public class OpenAiServe {
             resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(serviceErrorCount));
         }
         System.out.println("\n");
-        //feature to create ratio this to enums of outcomes for better user message
-        System.out.println("Not Bad - Marginal Success, review comments and counts, Have a nice day.");
+
     }
 
     public Map<String, LinkedList<String>> getResultsMap() {

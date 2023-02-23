@@ -17,11 +17,17 @@ public class App {
         Map<String, LinkedList<String>> results = runner.getResultsMap();
         JSON_result.saveMapToJson(results, "pr_summary.json");
         for (String cimmit: results.keySet()) {
+            System.out.println("[][][][][][][][][][][][][][][][][][][][][][][][][]");
+            System.out.println("**************************************************");
             System.out.println(cimmit);
+            System.out.println("**************************************************");
             for(String gens: results.get(cimmit)) {
+                System.out.println("-----------------------------------------------");
                 System.out.println(gens);
             }
         }
+        //feature to create ratio this to enums of outcomes for better user message
+        System.out.println("Not Bad - Marginal Success, review comments and counts, Have a nice day.");
 
     }
 }

@@ -1,14 +1,16 @@
 # AiPR
 Automated completion model generated pull request commit summary.
 
-### Limitations - Banned Words
-Because of the current commit read in method do not put the word 'commit', 'diff' or '@@' anywhere in the code or comments.
+### Limitations - Banned Words - Java Version - Shell Version
+Because of the current commit read in method **_do not put the word 'commit', 'diff' or '@@' anywhere in the code or comments_**.
 Including these words will break the method of pulling the code changes.
 
 Work small and commit often for best results. Limit your commits that you need for each pr. 
 
-This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal
-The project was compiled in Java-19 Amazon Corretto v19.0.2
+**This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal
+The project was compiled in Java-19 Amazon Corretto v19.0.2**
+
+If you see **retrofit2 illegal reflective access errors** you are not using a compatible Java version. Use Java-19 Amazon Corretto v19.0.2.
 
 ### How to setup the functionality
 The shell script must be first sourced to the terminal instance or added to the .bashrc file for your profile.
