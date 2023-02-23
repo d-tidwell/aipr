@@ -5,6 +5,9 @@
 **This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal
 The project was compiled in Java-19 Amazon Corretto v19.0.2**
 
+Many Java versions 15+ should sufficient. To install multiple versions or switch try SDKman:
+[https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
+
 If you see **retrofit2 illegal reflective access errors** you are not using a compatible Java version. Use Java-19 Amazon Corretto v19.0.2.
 
 ### How to set up the functionality
