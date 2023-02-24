@@ -2,7 +2,7 @@
 ## Automated completion model generated pull request commit summary.
 
 
-**This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal
+**This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal and Gradle 7.6
 The project was compiled in Java-19 Amazon Corretto v19.0.2**
 
 Many Java versions 15+ should sufficient. To install multiple versions or switch try SDKman:
