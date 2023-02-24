@@ -17,6 +17,8 @@ public class OpenAiServe {
 
     private Map<String, LinkedList<String>> resultsMap;
 
+    private String SOURCEDIR = "~/aipr";
+
     public OpenAiServe(){
         this.resultsMap = new HashMap<>();
     }
@@ -78,7 +80,7 @@ public class OpenAiServe {
     public void addToMap() throws IOException {
         OpenAiServe ai = new OpenAiServe();
         //find the commit file and extract commits into a map
-        CExtractor.extractcimmit("/mnt/c/code/");
+        CExtractor.extractcimmit(SOURCEDIR);
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         String numberOfCommits = String.valueOf(map.size());
         resultsMap.put("totalNumberOfCommits", new LinkedList<>(Collections.singletonList(numberOfCommits)));
