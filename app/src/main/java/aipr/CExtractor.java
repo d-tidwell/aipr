@@ -91,6 +91,9 @@ public class CExtractor {
      @return an ArrayList of strings, containing all substrings of the input string that occur between instances of the word
      */
     public static ArrayList<String> getSubstrings(String input, String word) {
+        if (input.length() == 0) {
+            return new ArrayList<>();
+        }
         ArrayList<String> substrings = new ArrayList<>();
         int index = 0;
         while (index < input.length()) {
