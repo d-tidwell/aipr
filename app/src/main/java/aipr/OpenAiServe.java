@@ -17,7 +17,7 @@ public class OpenAiServe {
 
     private Map<String, LinkedList<String>> resultsMap;
 
-    private String SOURCEDIR = "~/tmp/";
+    private String SOURCEDIR = "~/tmprqpr/";
 
     public OpenAiServe(){
         this.resultsMap = new HashMap<>();

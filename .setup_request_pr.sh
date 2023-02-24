@@ -2,6 +2,7 @@
 function setup_request_pr(){
 	echo "Copying current repository to new directory"
 	mkdir ~/aipr
+	mkdir ~/tmprqpr
 	cp -R . ~/aipr || echo "...attempt failed"
 	sleep 3s
 	echo "adding request_pr function to source"
