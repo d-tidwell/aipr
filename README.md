@@ -58,7 +58,7 @@ Work small and commit often for best results. Limit your commits that you need f
 
 ## The Model
 OpenAi currently does not offer ChatGPT to most of the public. As such this program is utilizing the "text-davinci-003" model.
-This model is a child of the GPT-3 (Generative Pre-trained Transformer 3) large-scale language model that uses deep learning to produce natural and human-like text.
+This model is a child of GPT-3 (Generative Pre-trained Transformer 3), alarge-scale language model that uses deep learning to produce natural and human-like text.
 It is made to be a text completion model that looks at the tokens of the prompt and traverses a vector in it's latent space to
 "complete" the given prompt. It is also limited to 4096 tokens or roughly 8000 words. Files with large file changes or a vast number
 of lines will either be skipped or result is erratic completions. Keep that in mind while committing or in your expectations of results.
