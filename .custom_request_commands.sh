@@ -7,7 +7,7 @@ function request_pr() {
         echo "try request_pr <date>"
     else
         echo "Creating changefile.txt with commits since $1"
-        git log -p --stat --since="$1" > ~/tmprqpr/changefile.txt
+        git log -p --stat --since="$1" > ~/aipr/tmprqpr/changefile.txt
         sleep 10s
         (cd ~/aipr && exec ./gradlew run --quiet --console=plain)
         

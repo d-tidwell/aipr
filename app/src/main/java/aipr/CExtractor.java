@@ -1,6 +1,7 @@
 package aipr;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +26,7 @@ public class CExtractor {
      **/
     public static void extractcimmit(String filepath) throws IOException {
         //bring in the file
+        System.out.println("HERE" + new File(filepath + SOURCEFILE).getAbsolutePath());
         BufferedReader realReader = new BufferedReader(new FileReader(filepath + SOURCEFILE));
 
         //string example of commit id to extract commit + hash number length for map key
