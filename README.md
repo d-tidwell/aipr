@@ -5,6 +5,8 @@
 **This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal and Gradle 7.6
 The project was compiled in Java-19 Amazon Corretto v19.0.2**
 
+**This has now been tested on MacOS Monterey in Linux Terminal version 21.5.0 as well**
+
 Many Java versions 15+ should sufficient. To install multiple versions or switch try SDKman:
 [https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
 
@@ -42,9 +44,16 @@ This key can also be passed to the System Environment variables and called direc
 
         cd ..
         rm -r -f aipr
-5. You may also need to allow permissions for ./gradlew in scripts using (at least on Mac, this is currently untested):
+
+5. Go to the newly created directory and rebuild with gradle:
         
-        chmod +x gradlew
+        cd ~/aipr
+        ./gradlew build
+
+6. You may also need to allow permissions for ./gradlew in scripts using (at least on Mac, this is currently untested).
+   navigate to ~/aipr and run the following:
+        
+           chmod +x gradlew
 
 7. From the directory **_you wish to create the pr summary from_** run **_request_pr_** and a version of a valid git date option i.e.
 
