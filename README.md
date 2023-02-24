@@ -39,12 +39,12 @@ This key can also be passed to the System Environment variables and called direc
         request_pr 2023-1-10
         request_pr 10 days ago
 
-   1st command: Only last commit - is the best solution for iterative commit summaries
-   2nd command: Everything since 12AM - best for daily pr requests each diff for each commit will be commented
-   3rd command: since this date - best for wrap up pr requests each diff for each commit will be commented
-   4th command: starting from today go 10 days back - same same but different
+   * 1st command: Only last commit - is the best solution for iterative commit summaries
+   * 2nd command: Everything since 12AM - best for daily pr requests each diff for each commit will be commented
+   * 3rd command: since this date - best for wrap up pr requests each diff for each commit will be commented
+   * 4th command: starting from today go 10 days back - same same but different
 
-6. the results will be available as a json file called pr_summary.json in ~/aipr and also printed to the command line
+6. the results will be available as a json file called pr_summary.json in ~/aipr/app and also printed to the command line
 7. The last entry of each commit is the error counts for prompt errors and service down error counts
 8. One key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
 
