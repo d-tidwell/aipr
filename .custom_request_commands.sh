@@ -7,9 +7,11 @@ function request_pr() {
         echo "try request_pr <date>"
     else
         echo "Creating changefile.txt with commits since $1"
-        git log -p --stat --since="$1" > ~/aipr/changefile.txt
-        sleep 5
-        (cd ~/aipr && exec ./gradlew run)
+        git log -p --stat --since="$1" > ~/tmp/changefile.txt
+        wait_file "/tmp/changefile.txt" && {
+          echo "File found."
+        }
+        (cd ~/aipr && exec ./gradlew run --quiet --console=plain)
         
     fi
 }
@@ -32,7 +34,7 @@ function request_help() {
     echo "possible to generate good results. These will result is a ERROR: Prompt size to large to complete request for file in"
     echo "If your file diff includes one of the 3 banned language usages of commit,diff, or @@ these also will be logged in stream"
     echo "If for some reason there is a network time on OpenAi's response time the result will be logged in place as a SERVICE ERROR"
-     echo "  "
+    echo "  "
     echo "__________________________________________________________________________________________________________________________________________"
     echo "  "
     echo "!!!  Please make sure before using you navigate to the project at root ~/aipr and make a java class API_KEY with the key given to you by OPENai"
