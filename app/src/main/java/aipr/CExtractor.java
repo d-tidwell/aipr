@@ -1,6 +1,7 @@
 package aipr;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,26 +14,26 @@ import java.util.Map;
 
 public class CExtractor {
     public static Map<String, ArrayList<String>> cimmitMap= new HashMap<>();
-    public static String SOURCEFILE = "changefile.txt";
+    public static String SOURCEFILE = "tmprqpr/changefile.txt";
 
     /**
      Extracts commits and code changes from a text file and populates them in a HashMap.
      The method takes a file path string and reads the file as a string. It then extracts all the commit ids from the file,
      uses a helper function to parse the text file and extract the actual code changes, and stores them in a HashMap.
      The commit ids are used as keys in the HashMap, and the corresponding code changes are stored as values in ArrayLists.
-     @param filepath a string representing the path of the file to be read
      @throws IOException if there is an error reading the file
      **/
-    public static void extractcimmit(String filepath) throws IOException {
+    public static void extractcimmit() throws IOException {
         //bring in the file
-        BufferedReader realReader = new BufferedReader(new FileReader(filepath + SOURCEFILE));
+        System.out.println("HERE" + new File(SOURCEFILE).getAbsolutePath());
+        BufferedReader realReader = new BufferedReader(new FileReader( SOURCEFILE));
 
         //string example of commit id to extract commit + hash number length for map key
         String tag = "cimmit 5d78304b7dfc861bfd57299fc3ca1c9a04a32078";
         int cimmitCount = tag.length();
 
         //read the file as a string
-        Path fileName = Path.of(filepath + SOURCEFILE);
+        Path fileName = Path.of(SOURCEFILE);
         String string = Files.readString(fileName);
 
         //calls helper function to get a list of Srings of all commits
