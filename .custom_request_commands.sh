@@ -9,7 +9,7 @@ function request_pr() {
         echo "Creating changefile.txt with commits since $1"
         git log -p --stat --since="$1" > ~/aipr/changefile.txt
         sleep 5
-        (cd ~/aipr && exec ./gradlew run)
+        (cd ~/aipr && exec ./gradlew run --quiet --console=plain)
         
     fi
 }
