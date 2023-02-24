@@ -80,7 +80,7 @@ public class OpenAiServe {
     public void addToMap() throws IOException {
         OpenAiServe ai = new OpenAiServe();
         //find the commit file and extract commits into a map
-        CExtractor.extractcimmit(SOURCEDIR);
+        CExtractor.extractcimmit();
         Map<String, ArrayList<String>> map = CExtractor.cimmitMap;
         String numberOfCommits = String.valueOf(map.size());
         resultsMap.put("totalNumberOfCommits", new LinkedList<>(Collections.singletonList(numberOfCommits)));
