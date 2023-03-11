@@ -1,6 +1,11 @@
 package aipr;
 
 import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.chat.ChatCompletionChoice;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatCompletionResult;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 
 import java.io.IOException;
@@ -10,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -42,28 +48,34 @@ public class OpenAiServe {
         //add the code prompt trimmed of new lines at the end or beginning to help model completion
         prompt_build.append(prompt_code.trim());
         //add the prefilled prompt for completion
-        prompt_build.append("Summarize the changes to the above code.\n");
-        prompt_build.append("The lines in the above code starting with + are additions to the code.\n");
-        prompt_build.append("The lines in the above code starting with - are lines removed from the code.\n");
-        prompt_build.append("Use Bullet points to communicate changes, being as clear and brief as possible.\n");
-        prompt_build.append("Comments:");
+        prompt_build.append("Summarize the changes to the code above.\n");
+        prompt_build.append("Lines in the above code starting with + are additions to the code.\n");
+        prompt_build.append("Lines in the above code starting with - are lines removed from the code.\n");
+        prompt_build.append("Bullet point each change of importance in the code, being as clear and brief as possible.\n");
+        prompt_build.append("Code Summary:");
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
         if (estimated_token_count + 500 > 3596) {
             return "ERROR: Prompt size to large to complete request for file in:  " + commitId;
         }
+        List<ChatMessage> messages = new ArrayList<>();
+        ChatMessage systemMessage = new ChatMessage(
+                ChatMessageRole.SYSTEM.value(),
+                "You are a helpful advanced semantic comprehension and conversational learning model tasked with summarizing code changes.");
+                messages.add(systemMessage);
+        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt_build.toString());
+                messages.add(userMessage);
 
-        CompletionRequest completionRequest = CompletionRequest.builder()
-                .model("text-davinci-003")
-                .prompt(prompt_build.toString())
-                .echo(false)
-                .user("testing")
-                .maxTokens(250)
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
+                .builder()
+                .model("gpt-3.5-turbo")
+                .messages(messages)
+                .logitBias(new HashMap<>())
                 .build();
 
         //return first result
         try {
-            String completion = service.createCompletion(completionRequest).getChoices().get(0).getText();
+            String completion = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).toString();
             return completion;
         } catch (RuntimeException RE) {
             return "SERVICE_ERROR_CAUSE: " + commitId + ":" + RE.getCause();
@@ -71,7 +83,7 @@ public class OpenAiServe {
 
     }
     /**
-     This method is used to extract commits from files located at "/mnt/c/code/" into a map, and then generates comments
+     This method is used to extract commits from files located at "~/aipr" into a map, and then generates comments
      for each commit using the OpenAiServe class. It also performs some error handling such as checking for banned phrases
      in the commit message and logging errors if the OpenAI service returns an error. The comments are added to a map
      called 'resultsMap'.

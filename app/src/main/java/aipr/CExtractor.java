@@ -25,7 +25,7 @@ public class CExtractor {
      **/
     public static void extractcimmit() throws IOException {
         //bring in the file
-        System.out.println("HERE" + new File(SOURCEFILE).getAbsolutePath());
+        //System.out.println("HERE" + new File(SOURCEFILE).getAbsolutePath());
         BufferedReader realReader = new BufferedReader(new FileReader( SOURCEFILE));
 
         //string example of commit id to extract commit + hash number length for map key
