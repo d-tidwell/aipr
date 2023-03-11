@@ -1,9 +1,6 @@
 package aipr;
 
-import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
@@ -51,7 +48,8 @@ public class OpenAiServe {
         prompt_build.append("Summarize the changes to the code above.\n");
         prompt_build.append("Lines in the above code starting with + are additions to the code.\n");
         prompt_build.append("Lines in the above code starting with - are lines removed from the code.\n");
-        prompt_build.append("Bullet point each change of importance in the code, being as clear and brief as possible.\n");
+        prompt_build.append("Bullet point all changes of importance in the code, being as clear and brief as possible.\n");
+        prompt_build.append("Reason each bullet point interpolating not just what the changes are but why.");
         prompt_build.append("Code Summary:");
 
         int estimated_token_count = (int)((prompt_build.toString().length() * 0.3924));
@@ -75,7 +73,7 @@ public class OpenAiServe {
 
         //return first result
         try {
-            String completion = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).toString();
+            String completion = service.createChatCompletion(chatCompletionRequest).getChoices().get(0).getMessage().getContent();
             return completion;
         } catch (RuntimeException RE) {
             return "SERVICE_ERROR_CAUSE: " + commitId + ":" + RE.getCause();
