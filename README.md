@@ -17,7 +17,7 @@ The shell script must be first sourced to the terminal instance.
 
 
 You must also **_make an OpenAi API account and get an api key_**. Create a java class called API_KEY.java and make that key a static variable
-This key can also be passed to the System Environment variables and called directly but you need to uncomment that after the setup code.
+This key can also be passed to the System Environment variables and called directly, but you need to uncomment that after the setup code.
 
 ### Steps to Reproduce Results
 1. Clone this repository
@@ -50,7 +50,7 @@ This key can also be passed to the System Environment variables and called direc
         cd ~/aipr
         ./gradlew build
 
-6. You may also need to allow permissions for ./gradlew in scripts using (at least on Mac, this is currently untested).
+6. You may also need to allow permissions for ./gradlew in scripts using the following:
    navigate to ~/aipr and run the following:
         
            chmod +x gradlew
@@ -80,10 +80,7 @@ Including these words will break the method of pulling the code changes.
 Work small and commit often for best results. Limit your commits that you need for each pr.
 
 ## The Model
-OpenAi currently does not offer ChatGPT to most of the public. As such this program is utilizing the "text-davinci-003" model.
-This model is a child of GPT-3 (Generative Pre-trained Transformer 3), a large-scale language model that uses deep learning to produce natural and human-like text.
-It is made to be a text completion model that looks at the tokens of the prompt and traverses a vector in it's latent space to
-"complete" the given prompt. It is also limited to 4096 tokens or roughly 8000 words. Files with large file changes or a vast number
+OpenAi currently offers ChatGPT!!!. As such this program is utilizing the "gpt-3.5-turbo" model.
+This model is a child of GPT-3 (Generative Pre-trained Transformer 3), a large-scale language model that uses unsupervised deep learning, fine tuning and reinforcment techniques to produce natural and human-like text.
+It is also limited to 4096 tokens or roughly 8000 words. Files with large file changes or a vast number
 of lines will either be skipped or result is erratic completions. Keep that in mind while committing or in your expectations of results.
-
-As new models and modes become available this repository will seek to update with the best fit model to complete its commenting.
