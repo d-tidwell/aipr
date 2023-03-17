@@ -10,6 +10,7 @@ The shell script must be first sourced to the terminal instance.
 
 You must also **_make an OpenAi API account and get an api key_**. Create a java class called API_KEY.java and make that key a static variable
 This key can also be passed to the System Environment variables and called directly, but you need to uncomment that after the setup code.
+
 ---
 ### Steps to Reproduce Results
 1. Clone this repository
@@ -61,6 +62,7 @@ This key can also be passed to the System Environment variables and called direc
    
 * The results will be available as a json file called pr_summary.json in ~/aipr/app and also printed to the command line
 * One result key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
+
 ---
 ### Limitations
 **This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal and Gradle 7.6
