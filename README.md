@@ -1,24 +1,16 @@
 # AiPR
 ## Automated completion model generated pull request commit summary.
 
+Command line solution for quick code change memos for pull requests.
 
-**This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal and Gradle 7.6
-The project was compiled in Java-19 Amazon Corretto v19.0.2**
-
-**This has now been tested on MacOS Monterey in Linux Terminal version 21.5.0 as well**
-
-Many Java versions 15+ should sufficient. To install multiple versions or switch try SDKman:
-[https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
-
-If you see **retrofit2 illegal reflective access errors** you are not using a compatible Java version. Use Java-19 Amazon Corretto v19.0.2.
-
+---
 ### How to set up the functionality
 The shell script must be first sourced to the terminal instance.
 
 
 You must also **_make an OpenAi API account and get an api key_**. Create a java class called API_KEY.java and make that key a static variable
 This key can also be passed to the System Environment variables and called directly, but you need to uncomment that after the setup code.
-
+---
 ### Steps to Reproduce Results
 1. Clone this repository
 2. Create an OpenAi API key through [https://openai.com/api/](https://openai.com/api/)
@@ -69,16 +61,26 @@ This key can also be passed to the System Environment variables and called direc
    
 * The results will be available as a json file called pr_summary.json in ~/aipr/app and also printed to the command line
 * One result key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
-
+---
 ### Limitations
+**This repository has been tested on Windows 11 with WSL2 Ubuntu 20.04 focal and Gradle 7.6
+The project was compiled in Java-19 Amazon Corretto v19.0.2**
 
-## Banned Words
+**This has now been tested on MacOS Monterey in Linux Terminal version 21.5.0 as well**
+
+Many Java versions 15+ should sufficient. To install multiple versions or switch try SDKman:
+[https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
+
+If you see **retrofit2 illegal reflective access errors** you are not using a compatible Java version. Use Java-19 Amazon Corretto v19.0.2.
+
+#### Banned Words
 The current commit read in method is a basic text scrape **_do not put the word 'commit', 'diff' or '@@' anywhere in the code or comments_**.
-Including these words will break the method of pulling the code changes.
+Including these words will result in skipping these code reviews and logging the error in result.
 
 Work small and commit often for best results. Limit your commits that you need for each pr.
 
-## The Model
+---
+#### The Model
 This program is utilizing the "gpt-3.5-turbo" model.
 This model is a child of GPT-3 (Generative Pre-trained Transformer 3), a large-scale language model that uses unsupervised deep learning, fine tuning and reinforcment techniques to produce natural and human-like text.
 It is also limited to 4096 tokens or roughly 8000 words. Files with large file changes or a vast number
