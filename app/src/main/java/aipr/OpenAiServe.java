@@ -87,7 +87,7 @@ public class OpenAiServe {
      called 'resultsMap'.
      @throws IOException if an I/O error occurs while extracting the commits from the files
      */
-    public void addToMap() throws IOException {
+    public void addToMap() throws IOException, InterruptedException {
         OpenAiServe ai = new OpenAiServe();
         //find the commit file and extract commits into a map
         CExtractor.extractcimmit();
@@ -95,58 +95,67 @@ public class OpenAiServe {
         String numberOfCommits = String.valueOf(map.size());
         resultsMap.put("totalNumberOfCommits", new LinkedList<>(Collections.singletonList(numberOfCommits)));
         System.out.print("Creating comments ...");
-        for(String x: map.keySet()) {
-            resultsMap.put(x,new LinkedList<>());
-            int diffErrorCount = 0;
-            int serviceErrorCount =0;
-            for(int i=0; i < map.get(x).size(); i++) {
 
+        List<Thread> threads = new ArrayList<>();
+        for (String x : map.keySet()) {
+            resultsMap.put(x, new LinkedList<>());
+
+            for (int i = 0; i < map.get(x).size(); i++) {
+                String commit = map.get(x).get(i);
                 LinkedList<String> existing = resultsMap.get(x);
 
-                if (map.get(x).get(i).contains("initial commit")) {
-                    existing.addLast("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
-                    diffErrorCount += 1;
-                    System.out.print("X");
-                    continue;
-                }
-                if (map.get(x).get(i).contains("diff")) {
-                    existing.addLast("ERROR: CONTAINS \"diff\" BANNED WORD");
-                    diffErrorCount += 1;
-                    System.out.print("X");
-                    continue;
-                }
-                if (map.get(x).get(i).contains("@@")) {
-                    existing.addLast("ERROR: CONTAINS \"@@\" BANNED PHRASE");
-                    diffErrorCount += 1;
-                    System.out.print("X");
-                    continue;
-                }
-                //make the actual request to openai for comment
-                String completion =  ai.makeRequest(x, map.get(x).get(i));
-                if (completion.contains("SERVICE_ERROR_CAUSE:")) {
-                    existing.addLast(completion);
-                    diffErrorCount += 1;
-                    System.out.print("X");
-                }
+                // create a thread for each commit
+                Thread thread = new Thread(() -> {
+                    if (commit.contains("initial commit")) {
+                        existing.addLast("ERROR: CONTAINS \"initial commit\" BANNED PHRASE");
+                        System.out.print("X");
+                        return;
+                    }
+                    if (commit.contains("diff")) {
+                        existing.addLast("ERROR: CONTAINS \"diff\" BANNED WORD");
+                        System.out.print("X");
+                        return;
+                    }
+                    if (commit.contains("@@")) {
+                        existing.addLast("ERROR: CONTAINS \"@@\" BANNED PHRASE");
+                        System.out.print("X");
+                        return;
+                    }
+                    // make the actual request to openai for comment
+                    String completion = null;
+                    try {
+                        completion = ai.makeRequest(x, commit);
+                    } catch (SocketTimeoutException e) {
+                        existing.addLast(e.getMessage());
+                        System.out.print("X");
+                    }
+                    if (completion.contains("SERVICE_ERROR_CAUSE:")) {
+                        existing.addLast(completion);
+                        System.out.print("X");
+                    }
 
-                if (completion.isEmpty()) {
-                    existing.addLast(
-                            "ERROR: NULL or EMPTY STRING COMPLETION FOR:" + map.get(x).get(i).substring(0,25));
-                    diffErrorCount += 1;
-                    System.out.print("X");
-                } else {
-                    existing.addLast(completion);
-                    System.out.print("♥");
-                }
+                    if (completion.isEmpty()) {
+                        existing.addLast(
+                                "ERROR: NULL or EMPTY STRING COMPLETION FOR:" + commit.substring(0, 25));
+                        System.out.print("X");
+                    } else {
+                        existing.addLast(completion);
+                        System.out.print("♥");
+                    }
+                });
+                thread.start();
+                threads.add(thread);
             }
-            //log diff errors in last index or first if 0 size
 
-            resultsMap.get(x).addLast("DIFF ERRORS = " + String.valueOf(diffErrorCount));
-            resultsMap.get(x).addLast("SERVICE ERRORS = " + String.valueOf(serviceErrorCount));
+            // wait for all threads to finish
+            for (Thread thread : threads) {
+                thread.join();
+            }
+
         }
         System.out.println("\n");
-
     }
+
 
     public Map<String, LinkedList<String>> getResultsMap() {
         return resultsMap;

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class App {
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, InterruptedException {
         OpenAiServe runner = new OpenAiServe();
         runner.addToMap();
         Map<String, LinkedList<String>> results = runner.getResultsMap();
