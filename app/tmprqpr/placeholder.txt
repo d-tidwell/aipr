@@ -1,1 +1,81 @@
-*This is a placeholder file for github so it doesn't delete the empty folder*
+commit 4e13d8278f25dd5261de194eaaa757054d26bdbc
+Author: dtidwell <conversations.and.L@gmail.com>
+Date:   Thu Mar 16 14:48:29 2023 -0500
+
+    Phase0-4 completed
+---
+ .../se/lambdaexpressions/classroom/IceCreamMaker.java       |  2 +-
+ .../lambdaexpressions/classroom/IceCreamParlorService.java  | 13 +++++++++----
+ 2 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamMaker.java b/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamMaker.java
+index 86e6e86..583af5f 100644
+--- a/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamMaker.java
++++ b/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamMaker.java
+@@ -27,7 +27,7 @@ public class IceCreamMaker {
+         while (true) {
+             // PHASE 4: Replace: use ingredientSupplier to get each ingredient
+             // (until null returned)
+-            Ingredient ingredient = null;
++            Ingredient ingredient = ingredientSupplier.get();
+
+             if (null == ingredient) {
+                 break;
+diff --git a/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamParlorService.java b/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamParlorService.java
+index 3b739d4..3a04e43 100644
+--- a/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamParlorService.java
++++ b/snippets/src/main/java/com/nashss/se/lambdaexpressions/classroom/IceCreamParlorService.java
+@@ -1,5 +1,6 @@
+ package com.nashss.se.lambdaexpressions.classroom;
+
++import com.nashss.se.lambdaexpressions.classroom.converter.RecipeConverter;
+ import com.nashss.se.lambdaexpressions.classroom.dao.CartonDao;
+ import com.nashss.se.lambdaexpressions.classroom.dao.RecipeDao;
+ import com.nashss.se.lambdaexpressions.classroom.exception.CartonCreationFailedException;
+@@ -15,6 +16,7 @@ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Queue;
+ import java.util.function.Function;
++import java.util.function.Supplier;
+ import java.util.stream.Collectors;
+ import javax.inject.Inject;
+
+@@ -53,7 +55,7 @@ public class IceCreamParlorService {
+         List<Carton> cartons = cartonDao.getCartonsByFlavorNames(flavorNames);
+
+         // PHASE 1: Use removeIf() to remove any empty cartons from cartons
+-
++        cartons.removeIf(Carton::isEmpty);
+         return buildSundae(cartons);
+     }
+
+@@ -63,7 +65,7 @@ public class IceCreamParlorService {
+
+         // PHASE 2: Use forEach() to add one scoop of each flavor
+         // remaining in cartons
+-
++        cartons.forEach(c -> sundae.addScoop(c.getFlavor()));
+         return sundae;
+     }
+
+@@ -94,7 +96,9 @@ public class IceCreamParlorService {
+         );
+
+         // PHASE 3: Replace right hand side: use map() to convert List<Recipe> to List<Queue<Ingredient>>
+-        List<Queue<Ingredient>> ingredientQueues = new ArrayList<>();
++        List<Queue<Ingredient>> ingredientQueues = map(recipes, recipe -> {
++            return RecipeConverter.fromRecipeToIngredientQueue(recipe);
++        });
+
+         return makeIceCreamCartons(ingredientQueues);
+     }
+@@ -106,7 +110,8 @@ public class IceCreamParlorService {
+         for (Queue<Ingredient> ingredients : ingredientQueues) {
+
+             // PHASE 4: provide Supplier to prepareIceCream()
+-            if (iceCreamMaker.prepareIceCreamCarton(null)) {
++            Supplier<Ingredient> ingredientSupplier = ingredients::poll;
++            if (iceCreamMaker.prepareIceCreamCarton(ingredientSupplier)) {
+                 cartonsCreated++;
+             }
+         }
