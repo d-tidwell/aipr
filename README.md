@@ -66,10 +66,9 @@ This key can also be passed to the System Environment variables and called direc
    * 2nd command: Everything since 12AM - best for daily pr requests each diff for each commit will be commented
    * 3rd command: since this date - best for wrap up pr requests each diff for each commit will be commented
    * 4th command: starting from today go 10 days back - same same but different
-
-8. the results will be available as a json file called pr_summary.json in ~/aipr/app and also printed to the command line
-9. The last entry of each commit is the error counts for prompt errors and service down error counts
-10. One result key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
+   
+* The results will be available as a json file called pr_summary.json in ~/aipr/app and also printed to the command line
+* One result key is dedicated to a total commit count for the service call called 'totalNumberOfCommits'
 
 ### Limitations
 
@@ -80,7 +79,7 @@ Including these words will break the method of pulling the code changes.
 Work small and commit often for best results. Limit your commits that you need for each pr.
 
 ## The Model
-OpenAi currently offers ChatGPT!!!. As such this program is utilizing the "gpt-3.5-turbo" model.
+This program is utilizing the "gpt-3.5-turbo" model.
 This model is a child of GPT-3 (Generative Pre-trained Transformer 3), a large-scale language model that uses unsupervised deep learning, fine tuning and reinforcment techniques to produce natural and human-like text.
 It is also limited to 4096 tokens or roughly 8000 words. Files with large file changes or a vast number
 of lines will either be skipped or result is erratic completions. Keep that in mind while committing or in your expectations of results.

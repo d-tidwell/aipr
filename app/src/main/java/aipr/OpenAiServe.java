@@ -48,7 +48,7 @@ public class OpenAiServe {
         prompt_build.append("Summarize the changes to the code above.\n");
         prompt_build.append("Lines in the above code starting with + are additions to the code.\n");
         prompt_build.append("Lines in the above code starting with - are lines removed from the code.\n");
-        prompt_build.append("Bullet point all changes of importance in the code, being as clear and brief as possible.\n");
+        prompt_build.append("Bullet point with * all changes of importance in the code, being as clear and brief as possible.\n");
         prompt_build.append("Reason each bullet point interpolating not just what the changes are but why they were made.");
         prompt_build.append("Code Change Summary:");
 
